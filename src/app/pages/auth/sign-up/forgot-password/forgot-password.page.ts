@@ -13,8 +13,7 @@ import { UtilsService } from 'src/app/services/utils.service';
 export class ForgotPasswordPage implements OnInit {
 
   form = new FormGroup({
-    name: new FormControl('', [Validators.required, Validators.minLength(4)]),
-    email: new FormControl('', [Validators.required, Validators.email]),
+      email: new FormControl('', [Validators.required, Validators.email]),
   })
 
   firebaseSvc = inject(FirebaseService);
@@ -32,6 +31,16 @@ async submit(){
 
       this.firebaseSvc.sendRecoveryEmail(this.form.value.email).then(res => {
 
+        this.utilsSvc.presentToast({
+          message: 'El correo se envio con exito',
+          duration: 1500,
+          color: 'primary',
+          position: 'middle',
+          icon: 'mail-outline'
+        });
+
+        this.utilsSvc.routerLink('/auth');
+        this.form.reset();
        
         
       }).catch(error => {
@@ -42,8 +51,8 @@ async submit(){
           duration: 2500,
           color: 'primary',
           position: 'middle',
-          icon: 'alert'
-         })
+          icon: 'alert-circle-outline'
+         });
          
       }).finally(() => {
         loading.dismiss();
